@@ -1,0 +1,13 @@
+{
+    "require": {
+        "symfony/dom-crawler": ">=2.6",
+        "symfony/console": ">=2.6",
+        "kleiram/transmission-php": "~1.0",
+        "symfony/css-selector": ">=2.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "QuickTorrent\\": "src/"
+        }
+    }
+}
