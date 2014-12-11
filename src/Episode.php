@@ -24,6 +24,7 @@ class Episode
     public static function fromString($string)
     {
         preg_match('/s(\d{2})e(\d{2})/i', $string, $matches);
+        /** @noinspection PhpUnusedLocalVariableInspection */
         list($fullEpisode, $season, $episode) = $matches;
         return new self($season, $episode);
     }

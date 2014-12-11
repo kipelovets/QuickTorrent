@@ -5,17 +5,21 @@
 
 namespace QuickTorrent;
 
+use QuickTorrent\TrackerClient\TrackerClient;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class UpdateCommand extends Command
 {
+    /** @var ShowRepository */
     private $repo;
+    /** @var TrackerClient */
     private $tracker;
+    /** @var TorrentClient */
     private $torrentClient;
 
-    public function __construct(ShowRepository $repo, Tracker $tracker, TorrentClient $torrentClient)
+    public function __construct(ShowRepository $repo, TrackerClient $tracker, TorrentClient $torrentClient)
     {
         $this->repo = $repo;
         $this->tracker = $tracker;

@@ -5,13 +5,18 @@
 
 namespace QuickTorrent;
 
+use QuickTorrent\TrackerClient\TrackerClient;
+
 class Checker
 {
+    /** @var ShowRepository */
     public $repo;
+    /** @var TrackerClient */
     public $tracker;
+    /** @var TorrentClient */
     public $torrentClient;
 
-    public function __construct($repo, $tracker, $torrentClient)
+    public function __construct(ShowRepository $repo, TrackerClient $tracker, TorrentClient $torrentClient)
     {
         $this->repo = $repo;
         $this->tracker = $tracker;

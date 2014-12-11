@@ -7,7 +7,9 @@ namespace QuickTorrent;
 
 class Show implements \JsonSerializable
 {
+    /** @var string */
     public $name;
+    /** @var string */
     public $lastEpisode;
 
     public function __construct($name, $lastEpisode)

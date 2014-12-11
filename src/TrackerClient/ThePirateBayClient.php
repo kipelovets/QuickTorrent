@@ -3,9 +3,13 @@
  * Коршунов Георгий <georgy.k@nevosoft.ru>
  */    
 
-namespace QuickTorrent;
+namespace QuickTorrent\TrackerClient;
 
-class Tracker
+use QuickTorrent\Episode;
+use QuickTorrent\Show;
+use Symfony\Component\DomCrawler\Crawler;
+
+class ThePirateBayClient implements TrackerClient
 {
     public function findMagnetUrl(Show $show, Episode $episode) 
     {
@@ -24,7 +28,7 @@ class Tracker
     private function extractMagnetUrls($uri)
     {
         $page = file_get_contents($uri);
-        $crawler = new \Symfony\Component\DomCrawler\Crawler($page, $uri);
+        $crawler = new Crawler($page, $uri);
         $nodes = $crawler->filter(".detName");
         if ($nodes->count() == 0) {
             return [];

@@ -5,12 +5,13 @@
 
 namespace QuickTorrent;
 
+use QuickTorrent\TrackerClient\KickassClient;
 use Symfony\Component\Console\Application;
 
 require_once('vendor/autoload.php');
 
 $torrentClient = new TorrentClient;
-$tracker = new Tracker;
+$tracker = new KickassClient();
 $repo = new ShowRepository;
 
 $app = new Application();
