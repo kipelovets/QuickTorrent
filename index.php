@@ -5,6 +5,8 @@
 
 namespace QuickTorrent;
 
+use QuickTorrent\Commands\AddCommand;
+use QuickTorrent\Commands\UpdateCommand;
 use QuickTorrent\TrackerClient\KickassClient;
 use Symfony\Component\Console\Application;
 

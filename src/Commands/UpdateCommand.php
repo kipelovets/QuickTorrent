@@ -3,8 +3,11 @@
  * kipelovets <kipelovets@mail.ru>
  */
 
-namespace QuickTorrent;
+namespace QuickTorrent\Commands;
 
+use QuickTorrent\Checker;
+use QuickTorrent\ShowRepository;
+use QuickTorrent\TorrentClient;
 use QuickTorrent\TrackerClient\TrackerClient;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

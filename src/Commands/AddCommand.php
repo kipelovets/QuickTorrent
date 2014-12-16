@@ -3,8 +3,10 @@
  * kipelovets <kipelovets@mail.ru>
  */
 
-namespace QuickTorrent;
+namespace QuickTorrent\Commands;
 
+use QuickTorrent\Show;
+use QuickTorrent\ShowRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
