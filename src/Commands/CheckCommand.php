@@ -13,20 +13,14 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class UpdateCommand extends Command
+class CheckCommand extends Command
 {
-    /** @var ShowRepository */
-    private $repo;
-    /** @var TrackerClient */
-    private $tracker;
-    /** @var TorrentClient */
-    private $torrentClient;
+    /** @var Checker */
+    private $checker;
 
-    public function __construct(ShowRepository $repo, TrackerClient $tracker, TorrentClient $torrentClient)
+    public function __construct(Checker $checker)
     {
-        $this->repo = $repo;
-        $this->tracker = $tracker;
-        $this->torrentClient = $torrentClient;
+        $this->checker = $checker;
         parent::__construct();
     }
 
@@ -39,7 +33,6 @@ class UpdateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $checker = new Checker($this->repo, $this->tracker, $this->torrentClient);
-        $checker->check();
+        $this->checker->check();
     }
 }

@@ -34,7 +34,7 @@ class Episode
         return new self($this->season, $this->episode + 1);
     }
 
-    public function nextSeason() 
+    public function firstEpisodeNextSeason()
     {
         return new self($this->season + 1, 1);
     }

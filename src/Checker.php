@@ -5,58 +5,63 @@
 
 namespace QuickTorrent;
 
+use QuickTorrent\HttpClientProvider\HttpClientProvider;
 use QuickTorrent\TrackerClient\TrackerClient;
 
 class Checker
 {
     /** @var ShowRepository */
-    public $repo;
+    private $repo;
     /** @var TrackerClient */
-    public $tracker;
+    private $tracker;
     /** @var TorrentClient */
-    public $torrentClient;
+    private $torrentClient;
+    /** @var HttpClientProvider */
+    private $httpClientProvider;
 
-    public function __construct(ShowRepository $repo, TrackerClient $tracker, TorrentClient $torrentClient)
+    public function __construct(ShowRepository $repo, TrackerClient $tracker, TorrentClient $torrentClient,
+        HttpClientProvider $httpClientProvider)
     {
         $this->repo = $repo;
         $this->tracker = $tracker;
         $this->torrentClient = $torrentClient;
+        $this->httpClientProvider = $httpClientProvider;
     }
 
     public function tryEpisode(Show $show, Episode $episode)
     {
-        $magnet = $this->tracker->findMagnetUrl($show, $episode);
-        if (!$magnet) {
-            return false;
-        }
-        echo "\tFound new episode $episode\n";
-        try {
-            $this->torrentClient->addMagnetUrl($magnet);
-        } catch (\Exception $e) {
-            echo get_class($e) . ' ' . $e->getMessage(). PHP_EOL;
-        }
-        $show->lastEpisode = $episode;
-        return true;
+        $this->tracker->lookupTorrentMagnetUrl($show, $episode, function ($magnet) use ($show, $episode) {
+            if (!$magnet) {
+                return;
+            }
+            echo "\tFound new episode $show > $episode\n";
+            try {
+                $this->torrentClient->addMagnetUrl($magnet);
+            } catch (\Exception $e) {
+                echo get_class($e) . ' ' . $e->getMessage(). PHP_EOL;
+            }
+            $show->lastEpisode = $episode;
+            $this->tryEpisode($show, $episode->nextEpisode());
+        });
     }
 
     public function check()
     {
+        echo "Looking for new episodes...\n";
         $shows = $this->repo->findAll();
         foreach ($shows as $show) {
-            echo "$show {$show->lastEpisode}\n";
             try {
-                do {
-                    $nextEpisode = $show->lastEpisode->nextEpisode();
-                    $nextSeason = $show->lastEpisode->nextSeason();
+                $nextEpisode = $show->lastEpisode->nextEpisode();
+                $this->tryEpisode($show, $nextEpisode);
 
-                    $anythingFound = $this->tryEpisode($show, $nextEpisode) 
-                                || $this->tryEpisode($show, $nextSeason);
-
-                } while ($anythingFound);
+                $nextSeason = $show->lastEpisode->firstEpisodeNextSeason();
+                $this->tryEpisode($show, $nextSeason);
 
             } catch (\Exception $e) {
                 echo "Error checking {$show}: " . $e->getMessage() . PHP_EOL;   
             }
         }
+        $this->httpClientProvider->runLoop();
+        echo "Done.\n";
     }
 }

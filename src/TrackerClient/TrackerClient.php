@@ -9,5 +9,5 @@ use QuickTorrent\Show;
 
 interface TrackerClient
 {
-    public function findMagnetUrl(Show $show, Episode $episode);
+    public function lookupTorrentMagnetUrl(Show $show, Episode $episode, $callback);
 }

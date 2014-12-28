@@ -9,7 +9,7 @@ class Show implements \JsonSerializable
 {
     /** @var string */
     public $name;
-    /** @var string */
+    /** @var Episode */
     public $lastEpisode;
 
     public function __construct($name, $lastEpisode)

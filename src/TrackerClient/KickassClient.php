@@ -11,7 +11,7 @@ use QuickTorrent\Show;
 
 class KickassClient implements TrackerClient
 {
-    public function findMagnetUrl(Show $show, Episode $episode)
+    public function lookupTorrentMagnetUrl(Show $show, Episode $episode)
     {
         $urls = $this->extractMagnetUrls($show, $episode);
         if (!$urls) {

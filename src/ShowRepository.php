@@ -33,6 +33,9 @@ class ShowRepository
         return $shows;
     }
 
+    /**
+     * @return Show[]
+     */
     public function findAll()
     {
         return $this->shows;
