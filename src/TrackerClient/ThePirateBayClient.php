@@ -45,6 +45,8 @@ class ThePirateBayClient implements TrackerClient
             }
 
             $callback([ $nodes->first()->siblings()->first()->getNode(0)->getAttribute('href') ]);
-        }, function () {});
+        }, function ($error) {
+            var_dump($error);
+        });
     }
 }

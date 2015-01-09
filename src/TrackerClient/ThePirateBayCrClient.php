@@ -13,6 +13,7 @@ class ThePirateBayCrClient extends ThePirateBayClient implements TrackerClient
 {
     protected function formatUrl(Show $show, Episode $episode)
     {
-        return "http://thepiratebay.cz/search/{$show} {$episode}/0/7/0";
+        $arg = urlencode("{$show} {$episode}");
+        return "http://thepiratebay.cr/search/$arg/0/7/0";
     }
 }

@@ -9,7 +9,7 @@ namespace QuickTorrent;
 use QuickTorrent\Commands\AddCommand;
 use QuickTorrent\Commands\CheckCommand;
 use QuickTorrent\HttpClientProvider\ReactHttpClientProvider;
-use QuickTorrent\TrackerClient\ThePirateBayCrClient;
+use QuickTorrent\TrackerClient\KickassClient;
 use Symfony\Component\Console\Application;
 
 require_once('vendor/autoload.php');
@@ -30,12 +30,12 @@ $client = $factory->create($loop, $dnsResolver);
 
 $httpClientProvider = new ReactHttpClientProvider($loop, $client);
 
-$tracker = new ThePirateBayCrClient($httpClientProvider->getHttpClient());
+$tracker = new KickassClient($httpClientProvider->getHttpClient());
 
 $checker = new Checker($repo, $tracker, $torrentClient, $httpClientProvider);
 
 $app = new Application();
 $app->add(new CheckCommand($checker));
 $app->add(new AddCommand($repo));
-$app->setDefaultCommand('update');
+$app->setDefaultCommand('check');
 $app->run();

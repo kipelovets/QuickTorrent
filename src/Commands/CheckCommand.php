@@ -6,11 +6,9 @@
 namespace QuickTorrent\Commands;
 
 use QuickTorrent\Checker;
-use QuickTorrent\ShowRepository;
-use QuickTorrent\TorrentClient;
-use QuickTorrent\TrackerClient\TrackerClient;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CheckCommand extends Command
@@ -26,13 +24,15 @@ class CheckCommand extends Command
 
     protected function configure()
     {
-        $this->setName('update')
-            ->setDescription('Updates shows')
+        $this->setName('check')
+            ->setDescription('Check shows for new episodes')
+            ->addOption('all', '-a', InputOption::VALUE_NONE, 'Continue searching for episodes if any was found')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->checker->check();
+        $recurse = $input->getOption('all');
+        $this->checker->check($recurse);
     }
 }

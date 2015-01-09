@@ -28,9 +28,9 @@ class Checker
         $this->httpClientProvider = $httpClientProvider;
     }
 
-    public function tryEpisode(Show $show, Episode $episode)
+    private function tryEpisode(Show $show, Episode $episode, $recurse = false)
     {
-        $this->tracker->lookupTorrentMagnetUrl($show, $episode, function ($magnet) use ($show, $episode) {
+        $this->tracker->lookupTorrentMagnetUrl($show, $episode, function ($magnet) use ($show, $episode, $recurse) {
             if (!$magnet) {
                 return;
             }
@@ -41,21 +41,23 @@ class Checker
                 echo get_class($e) . ' ' . $e->getMessage(). PHP_EOL;
             }
             $show->lastEpisode = $episode;
-            $this->tryEpisode($show, $episode->nextEpisode());
+            if ($recurse) {
+                $this->tryEpisode($show, $episode->nextEpisode());
+            }
         });
     }
 
-    public function check()
+    public function check($recurse = false)
     {
         echo "Looking for new episodes...\n";
         $shows = $this->repo->findAll();
         foreach ($shows as $show) {
             try {
                 $nextEpisode = $show->lastEpisode->nextEpisode();
-                $this->tryEpisode($show, $nextEpisode);
+                $this->tryEpisode($show, $nextEpisode, $recurse);
 
                 $nextSeason = $show->lastEpisode->firstEpisodeNextSeason();
-                $this->tryEpisode($show, $nextSeason);
+                $this->tryEpisode($show, $nextSeason, $recurse);
 
             } catch (\Exception $e) {
                 echo "Error checking {$show}: " . $e->getMessage() . PHP_EOL;   
